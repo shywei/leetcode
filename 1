@@ -15,28 +15,13 @@
 	 */
 	public static int[] twoSum(int[] nums, int target) {
 		/* 思路：利用hashmap记录数组下标和值，遍历数组找到与之匹配的已遍历过的值 */
-		HashMap<Double, Integer> lowerHalf = new HashMap<Double, Integer>();
-		HashMap<Double, Integer> upperHalf = new HashMap<Double, Integer>();
-		double halfValue = (double)target/2;
-		int halfIndex1 = -1, halfIndex2 = -1;
+		HashMap<Integer, Integer> indexMap = new HashMap<Integer, Integer>();
 		for(int i=0;i< nums.length;i++) {
-			double res = nums[i] - halfValue;
-			if(res > 0) {
-				if(lowerHalf.containsKey(res * -1)) {
-					return new int[] {lowerHalf.get(res * -1), i};
-				}
-				upperHalf.put(res, i);
-			}else if(res < 0){
-				if(upperHalf.containsKey(res * -1)) {
-					return new int[] {upperHalf.get(res * -1), i};
-				}
-				lowerHalf.put(res,i);
-			}else if(halfIndex1 == -1){
-				halfIndex1 = i;
-			}else {
-				halfIndex2 = i;
-				return new int[] {halfIndex1, halfIndex2};
+			int couple = target-nums[i];
+			if(indexMap.containsKey(couple)) {
+				return new int[] {indexMap.get(couple), i};
 			}
+			indexMap.put(nums[i], i);
 		}
 
 		return new int[] {-1,-1};
