@@ -1,43 +1,44 @@
-/**
-	 * 有一个需要密码才能打开的保险箱。密码是 n 位数, 密码的每一位是 k 位序列 0, 1, ..., k-1 中的一个 。
-	 * 你可以随意输入密码，保险箱会自动记住最后 n 位输入，如果匹配，则能够打开保险箱。
-	 * 举个例子，假设密码是 "345"，你可以输入 "012345" 来打开它，只是你输入了 6 个字符.
-	 * 请返回一个能打开保险箱的最短字符串。
+/*
+	有一个需要密码才能打开的保险箱。密码是 n 位数, 密码的每一位是 k 位序列 0, 1, ..., k-1 中的一个 。
+	你可以随意输入密码，保险箱会自动记住最后 n 位输入，如果匹配，则能够打开保险箱。
+	举个例子，假设密码是 "345"，你可以输入 "012345" 来打开它，只是你输入了 6 个字符.
+	请返回一个能打开保险箱的最短字符串。
+	来源：力扣（LeetCode）
+	链接：https://leetcode-cn.com/problems/sum-of-root-to-leaf-binary-numbers
+	著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
 
-	 * @param n
-	 * @param k
-	 * @return
-	 */
-	public static String crackSafe(int n, int k) {
-		/*
-		 * 思路：如果生成的字符串任意n位都是一个不同的密码串，那这样的字符串长度肯定是最小的。
-		 * 以全0字符串为基础，每次取后n-1位字符串，向后再添加一位数字，如果之前没有出现过，则插入到结果字符串末尾。
-		 * 这个思路是可行的，但是其中的数学原理我自己并未想清楚。参考了如下两篇文章：
-		 * https://blog.csdn.net/luke2834/article/details/79341677
-		 * https://blog.csdn.net/fuxuemingzhu/article/details/82945477
-		 */        
-		int total = (int) Math.pow(k, n);
-        HashMap<String, String> countedKeys = new HashMap<String, String>();
-        StringBuilder res = new StringBuilder();// StringBuilder比String性能要好
-        StringBuilder currentKey = new StringBuilder();
-        for (int i=0;i<n;i++) {
-        	res.append("0");
-        	currentKey.append("0");
-        }
-        countedKeys.put(currentKey.toString(), currentKey.toString());
-        while(countedKeys.size() < total) {
-        	currentKey.delete(0, 1);
-        	for(int i=k-1;i>=0;i--) {
-        		// 此处必须降序，否则返回的结果不正确
-        		currentKey.append(i);
-        		if(!countedKeys.containsKey(currentKey.toString())) {
-        			res.append(i);
-        			countedKeys.put(currentKey.toString(), currentKey.toString());
-        			break;
-        		}else {
-        			currentKey.delete(n-1, n);
-        		}
-        	}
-        }
-        return res.toString();
-    }
+
+public static String crackSafe(int n, int k) {
+	/*
+	 * 思路：如果生成的字符串任意n位都是一个不同的密码串，那这样的字符串长度肯定是最小的。
+	 * 以全0字符串为基础，每次取后n-1位字符串，向后再添加一位数字，如果之前没有出现过，则插入到结果字符串末尾。
+	 * 这个思路是可行的，但是其中的数学原理我自己并未想清楚。参考了如下两篇文章：
+	 * https://blog.csdn.net/luke2834/article/details/79341677
+	 * https://blog.csdn.net/fuxuemingzhu/article/details/82945477
+	 */        
+	int total = (int) Math.pow(k, n);
+	HashMap<String, String> countedKeys = new HashMap<String, String>();
+	StringBuilder res = new StringBuilder();// StringBuilder比String性能要好
+	StringBuilder currentKey = new StringBuilder();
+	for (int i=0;i<n;i++) {
+		res.append("0");
+		currentKey.append("0");
+	}
+	countedKeys.put(currentKey.toString(), currentKey.toString());
+	while(countedKeys.size() < total) {
+		currentKey.delete(0, 1);
+		for(int i=k-1;i>=0;i--) {
+			// 此处必须降序，否则返回的结果不正确
+			currentKey.append(i);
+			if(!countedKeys.containsKey(currentKey.toString())) {
+				res.append(i);
+				countedKeys.put(currentKey.toString(), currentKey.toString());
+				break;
+			}else {
+				currentKey.delete(n-1, n);
+			}
+		}
+	}
+	return res.toString();
+}
